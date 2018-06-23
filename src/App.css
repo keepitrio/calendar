@@ -1,0 +1,85 @@
+.App {
+    text-align: center;
+}
+
+.App-header {
+    text-align: center;
+    height: 150px;
+    padding: 20px;
+    display: flex;
+}
+
+.App-title {
+    font-size: 3em;
+    align-self: flex-start;
+    flex-grow: 2;
+    margin-left: -77%;
+    margin-top: 1%;
+}
+
+.username {
+    align-self: flex-end;
+    color: rgb(94, 159, 221);
+}
+
+.App-intro {
+    font-size: large;
+}
+
+.calendar {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.day-box {
+    height: 150px;
+    flex: 1 1 12%;
+    margin: 1%;
+    border: 2px solid rgb(223, 164, 164);
+    text-align: left;
+}
+
+.day-number {
+    margin-left: 5%;
+}
+
+.new-event-button {
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+    position: relative;
+    top: -50px;
+    border: none;
+    outline: none;
+}
+
+.event-box {
+  top: -122%;
+  position: relative;
+}
+
+.event-form {
+  margin-top: -39px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 17%;
+}
+
+.input {
+    border: 0;
+    background: none;
+    outline: none;
+}
+
+.input:focus {
+    border: solid 1px lightgrey;
+}
+
+input[type="submit"] {
+    width: 63px;
+    margin-top: 3px;
+}
+
+label {
+    color: rgb(94, 94, 94)
+}
