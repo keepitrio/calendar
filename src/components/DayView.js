@@ -31,9 +31,9 @@ class DayView extends Component {
         return (
             <div className="day-box">
                 <p className="day-number">{this.props.day}</p>
+                {this.state.showEvents && <EventsContainer events={this.state.events} day={this.props.day} />}
                 {this.state.showButton && <button className="new-event-button" onClick={this.showForm}></button>}
                 {this.state.showForm && <EventForm  events={this.state.events} day={this.props.day} />}
-                {this.state.showEvents && <EventsContainer events={this.state.events} day={this.props.day} />}
             </div>
         )
     }
