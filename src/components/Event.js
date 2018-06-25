@@ -1,17 +1,16 @@
 import React from 'react';
 import Moment from 'react-moment';
 
-const Event = (event) => {
-    const eventDetails = event.event;
-    const startTime = eventDetails.start;
-    const endTime = eventDetails.end;
+const Event = ({ event }) => {
+    const { start, end, id, description } = event;
+
     return (
-        <div className="description" key={eventDetails.id}>
-            <h4>{eventDetails.description}</h4>
+        <div className="description" key={id}>
+            <h4>{description}</h4>
             <p>
-                <Moment format="HH:mm A">{startTime}</Moment>
+                <Moment format="HH:mm A">{start}</Moment>
                 -
-                <Moment format="HH:mm A">{endTime}</Moment>
+                <Moment format="HH:mm A">{end}</Moment>
             </p>
         </div>
     )

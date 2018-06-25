@@ -8,7 +8,8 @@ class EventForm extends Component {
         this.state = {
             description: '',
             start: null, 
-            end: null
+            end: null,
+            errors: []
         }
     }
 
@@ -17,16 +18,24 @@ class EventForm extends Component {
     }
 
     handleSubmit = (e) => {
-        const { state, props } = this;
+        const { description, start, end } = this.state;
+        const { day } = this.props;
+        const errors = validate(description, start, end);
+        console.log(errors);
+        if (errors.length > 0) {
+            e.preventDefault();
+            this.setState({ errors });
+            return;
+        }
 
         axios.post(
             'http://localhost:3001/api/v1/events',
             { event:
                 {
-                    description: state.description,
-                    start: state.start,
-                    end: state.end,
-                    dayId: props.day
+                    description: description,
+                    start: start,
+                    end: end,
+                    day_id: day
                 }
             }
         )
@@ -37,23 +46,27 @@ class EventForm extends Component {
             })
             this.setState({events: events})
         })
-        .catch(error => console.log(error))
+        .catch(error => console.error(error))
     }
     
     render() {
+        const { errors } = this.state;
         return (
             <form className="event-form">
                 <label>
-                    Description:
-                    <input type="text" name="description" onChange={this.handleInput} />
+                    Description: 
+                    <input value={this.state.description} type="text" name="description" onChange={this.handleInput} />
+                    <p className="error">{errors[0]}</p>
                 </label>
                 <label>
-                    Start time:
+                    Start time
                     <input type="time" name="start" onChange={this.handleInput} />
+                    <p className="error">{errors[1]}</p>
                 </label>
                 <label>
-                    End time:
+                    End time
                     <input type="time" name="end" onChange={this.handleInput} />
+                    <p className="error">{errors[2]}</p>
                 </label>
                 <input type="submit" value="Submit" onClick={this.handleSubmit}/>
             </form>
@@ -62,3 +75,21 @@ class EventForm extends Component {
 }
 
 export default EventForm;
+
+function validate(description, start, end) {
+    const errors =[];
+
+    if(!description) {
+        errors.push("Description can't be empty");
+    }
+
+    if(!start) {
+        errors.push("Start time can't be empty");
+    }
+
+    if(!end) {
+        errors.push("End time can't be empty");
+    }
+
+    return errors;
+}
