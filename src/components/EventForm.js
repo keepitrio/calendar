@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import update from 'immutability-helper';
+import PropTypes from 'prop-types';
 
 class EventForm extends Component {
     constructor(props) {
@@ -72,6 +73,11 @@ class EventForm extends Component {
             </form>
         )
     }
+}
+
+EventForm.propTypes = {
+    day: PropTypes.number,
+    events: PropTypes.array
 }
 
 export default EventForm;

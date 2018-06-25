@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import EventsContainer from './EventsContainer';
 import EventForm from './EventForm';
+import PropTypes from 'prop-types';
 
 class Day extends Component {
     constructor(props) {
@@ -27,6 +28,11 @@ class Day extends Component {
             </div>
         )
     }
+}
+
+Day.propTypes = {
+    day: PropTypes.number,
+    events: PropTypes.array
 }
 
 export default Day;

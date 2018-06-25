@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Day from './Day.js';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 class Calendar extends Component {
     constructor(props) {
@@ -31,6 +32,10 @@ class Calendar extends Component {
             <div className="calendar">{days}</div>
         )
     }
+}
+
+Calendar.propTypes = {
+    days: PropTypes.number
 }
 
 export default Calendar;

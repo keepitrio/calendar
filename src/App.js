@@ -10,7 +10,7 @@ class App extends Component {
                     <h1 className="App-title">February</h1>
                     <p className="username">Daenerys</p>
                 </div>
-                <Calendar days="29"/>
+                <Calendar days={29}/>
             </div>
         );
     }
