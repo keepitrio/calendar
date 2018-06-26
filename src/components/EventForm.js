@@ -20,8 +20,6 @@ class EventForm extends Component {
         e.preventDefault();
         const { description, start, end } = this.state;
         const { day, editForm, id } = this.props;
-        console.log(this.state)
-        console.log(this.props)
         const errors = validate(description, start, end);
         if (errors.length > 0) {
             e.preventDefault();
