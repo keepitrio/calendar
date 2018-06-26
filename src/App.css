@@ -32,6 +32,7 @@
 
 .day-box {
     height: 150px;
+    width: 150px;
     flex: 1 1 12%;
     margin: 1%;
     border: 2px solid rgb(223, 164, 164);
@@ -42,14 +43,27 @@
     margin-left: 5%;
 }
 
-.new-event-button {
+.btn {
     background-color: transparent;
     position: relative;
     border: none;
     outline: none;
     color: rgb(34, 34, 197);
+    cursor: pointer;
+}
+
+.btn:hover {
+    color: rgb(71, 135, 231);
+}
+
+.new-event-button {
     top: -18px;
     left: 26px;
+}
+
+.edit-button {
+    padding-left: 0;
+    text-align: left;
 }
 
 .event-box {
@@ -63,6 +77,7 @@
 .description {
     display: flex;
     flex-direction: column;
+    cursor: default;
 }
 
 h4 {
@@ -80,7 +95,6 @@ p {
     display: flex;
     flex-direction: column;
     background-color: white;
-    z-index: 3;
     position: relative;
     border: 1px solid black;
     margin: 5px;
@@ -110,4 +124,9 @@ label {
 .error {
     color: red;
     font-size: 10px;
+}
+
+.event-box div .event-form {
+    overflow: inherit;
+    position: absolute;
 }

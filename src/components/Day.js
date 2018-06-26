@@ -19,12 +19,19 @@ class Day extends Component {
     }
 
     render() {
+        const { day, events, onSubmit } = this.props;
         return (
             <div className="day-box">
-                <p className="day-number">{this.props.day}</p>
-                {this.state.showButton && <button className="new-event-button" onClick={this.showForm}> Create </button>}
-                {this.state.showForm && <EventForm events={this.props.events} day={this.props.day} />}
-                {this.state.showEvents && <EventsContainer events={this.props.events} day={this.props.day} />}
+                <p className="day-number">{day}</p>
+                {this.state.showButton && 
+                    <button className="new-event-button btn" onClick={this.showForm}> Create </button>
+                }
+                {this.state.showForm && 
+                    <EventForm onSubmit={onSubmit} day={day}/>
+                }
+                {this.state.showEvents && 
+                    <EventsContainer events={events} day={day} onSubmit={onSubmit} />
+                }
             </div>
         )
     }
@@ -32,7 +39,8 @@ class Day extends Component {
 
 Day.propTypes = {
     day: PropTypes.number,
-    events: PropTypes.array
+    events: PropTypes.array,
+    onSubmit: PropTypes.func
 }
 
 export default Day;
