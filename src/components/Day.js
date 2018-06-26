@@ -7,15 +7,27 @@ class Day extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dayId: null,
+            day: null,
             showForm: false,
             showEvents: true,
             showButton: true,
+            events: null,
+            editForm: false,
+            eventId: null,
+            event: null
         };
     }
     
     showForm = () => {
         this.setState({showForm: true, showEvents: false, showButton: false});
+    }
+
+    hideForm = () => {
+        this.setState({showForm: false, showEvents: true, showButton: true});
+    }
+
+    editEvent = (event) => {
+        this.setState({showEvents: false, showForm: true, editForm: true, event: event});
     }
 
     render() {
@@ -27,10 +39,10 @@ class Day extends Component {
                     <button className="new-event-button btn" onClick={this.showForm}> Create </button>
                 }
                 {this.state.showForm && 
-                    <EventForm onSubmit={onSubmit} day={day}/>
+                    <EventForm onSubmit={onSubmit} hideForm={this.hideForm} day={day} editForm={this.state.editForm} event={this.state.event} />
                 }
                 {this.state.showEvents && 
-                    <EventsContainer events={events} day={day} onSubmit={onSubmit} />
+                    <EventsContainer events={events} day={day} onSubmit={onSubmit} editEvent={this.editEvent} />
                 }
             </div>
         )

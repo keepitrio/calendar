@@ -8,7 +8,9 @@ class EventsContainer extends Component {
         return (
             <div className="event-box">
                 {events.map(event => {
-                    return (<Event event={event} key={event.id} day={event.day_id} events={events} onSubmit={onSubmit} />)
+                    return (
+                        <Event event={event} key={event.id} events={events} onSubmit={onSubmit} editEvent={this.props.editEvent}/>
+                    )
                 })}
             </div>
         );
@@ -16,7 +18,9 @@ class EventsContainer extends Component {
 }
 
 EventsContainer.propTypes = {
-    events: PropTypes.array
+    events: PropTypes.array,
+    onSubmit: PropTypes.func,
+    editEvent: PropTypes.func
 }
 
 export default EventsContainer;

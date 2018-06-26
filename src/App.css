@@ -68,7 +68,7 @@
 
 .event-box {
     position: relative;
-    height: 83%;
+    height: 86%;
     overflow: auto;
     top: -16px;
     padding-left: 30px;
@@ -100,6 +100,7 @@ p {
     margin: 5px;
     padding: 5px;
     left: 14%;
+    top: -33%;
 }
 
 .input {
@@ -124,9 +125,4 @@ label {
 .error {
     color: red;
     font-size: 10px;
-}
-
-.event-box div .event-form {
-    overflow: inherit;
-    position: absolute;
 }

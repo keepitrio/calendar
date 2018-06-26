@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
 class EventForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
             description: '',
-            start: null, 
-            end: null,
+            start: "", 
+            end: "",
             errors: []
         }
     }
@@ -19,14 +20,27 @@ class EventForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const { description, start, end } = this.state;
-        const { day, editForm, id } = this.props;
+        const { day, editForm, event } = this.props;
         const errors = validate(description, start, end);
         if (errors.length > 0) {
             e.preventDefault();
             this.setState({ errors });
             return;
         }
-        this.props.onSubmit(description, start, end, day, editForm, id);
+        this.props.onSubmit(description, start, end, day, editForm, event.id);
+    }
+
+    handleCancel = () => {
+        this.props.hideForm();
+    }
+
+    componentWillMount = () => {
+        if (this.props.event){
+            const { description, start, end } = this.props.event;
+            const startTime = moment(start).format("HH:mm");
+            const endTime = moment(end).format("HH:mm");
+            this.setState({description: description, start: startTime, end: endTime});
+        }
     }
     
     render() {
@@ -43,13 +57,16 @@ class EventForm extends Component {
                 </label>
                 <label>
                     Start time
-                    <input type="time" name="start" onChange={this.handleInput} />
+                    <input value={this.state.start} type="time" name="start" onChange={this.handleInput} />
                 </label>
                 <label>
                     End time
-                    <input type="time" name="end" onChange={this.handleInput} />
+                    <input value={this.state.end} type="time" name="end" onChange={this.handleInput} />
                 </label>
-                <input type="submit" value="Submit" onClick={this.handleSubmit}/>
+                <div className="form-buttons">
+                    <input type="submit" value="Submit" onClick={this.handleSubmit} />
+                    <button value="cancel" onClick={this.handleCancel}>Cancel</button>
+                </div>
             </form>
         )
     }
@@ -79,7 +96,8 @@ function validate(description, start, end) {
 }
 
 EventForm.propTypes = {
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
+    event: PropTypes.object
 }
 
 export default EventForm;
