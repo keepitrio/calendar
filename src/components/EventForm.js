@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class EventForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            description: '',
+            description: "",
             start: "", 
             end: "",
             errors: []
@@ -20,14 +19,17 @@ class EventForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const { description, start, end } = this.state;
-        const { day, editForm, event } = this.props;
+        const { day, eventToEdit, onSubmit } = this.props;
         const errors = validate(description, start, end);
         if (errors.length > 0) {
-            e.preventDefault();
             this.setState({ errors });
             return;
         }
-        this.props.onSubmit(description, start, end, day, editForm, event.id);
+        if(eventToEdit) {
+            onSubmit(description, start, end, day, eventToEdit.id);
+            return;
+        }
+        onSubmit(description, start, end, day, null);
     }
 
     handleCancel = () => {
@@ -35,22 +37,22 @@ class EventForm extends Component {
     }
 
     componentWillMount = () => {
-        if (this.props.event){
-            const { description, start, end } = this.props.event;
-            const startTime = moment(start).format("HH:mm");
-            const endTime = moment(end).format("HH:mm");
-            this.setState({description: description, start: startTime, end: endTime});
+        if (this.props.eventToEdit){
+            const { description, start, end } = this.props.eventToEdit;
+            const times = this.props.formatTime(start, end);
+            this.setState({description: description, start: times.start, end: times.end});
         }
     }
     
     render() {
         const { errors } = this.state;
+        let errorsToDisplay = [];
+        for(let i = 0; i < errors.length; i++) {
+            errorsToDisplay.push(<p className="error" key={`error-${i}`}>{errors[i]}</p>)
+        }
         return (
             <form className="event-form">
-                <p className="error">{errors[0]}</p>
-                <p className="error">{errors[1]}</p>
-                <p className="error">{errors[2]}</p>
-                <p className="error">{errors[3]}</p>
+                <div>{errorsToDisplay}</div>
                 <label>
                     Description: 
                     <input value={this.state.description} type="text" name="description" onChange={this.handleInput} />
@@ -65,7 +67,7 @@ class EventForm extends Component {
                 </label>
                 <div className="form-buttons">
                     <input type="submit" value="Submit" onClick={this.handleSubmit} />
-                    <button value="cancel" onClick={this.handleCancel}>Cancel</button>
+                    <button value="cancel" onClick={this.props.hideForm}>Cancel</button>
                 </div>
             </form>
         )
@@ -96,8 +98,11 @@ function validate(description, start, end) {
 }
 
 EventForm.propTypes = {
-    onSubmit: PropTypes.func,
-    event: PropTypes.object
+    hideForm: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    event: PropTypes.object,
+    day: PropTypes.number.isRequired
 }
 
 export default EventForm;
+

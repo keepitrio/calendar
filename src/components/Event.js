@@ -1,38 +1,30 @@
 import React, { Component } from 'react';
-import Moment from 'react-moment';
-
-import axios from 'axios';
-import update from 'immutability-helper';
 import PropTypes from 'prop-types';
 
 class Event extends Component {
     handleDelete = (e) => {
         const { id } = this.props.event;
-        axios.delete(`http://localhost:3001/api/v1/events/${id}`)
-        .then(response => {
-            const eventIndex = this.props.events.findIndex(i => i.id === id);
-            const events = update(this.props.events, { $splice: [[eventIndex, 1]] });
-            this.setState({ events: events });
-            window.location.reload();
-        })
-        .catch(error => console.log(error))
+        this.props.onDelete(id);
+        window.location.reload();
     }
 
     handleEditClick = () => {
-        this.props.editEvent(this.props.event);
+        this.props.showEditForm(this.props.event);
+    }
+
+    formatTimes = (start, end) => {
+        
     }
 
     render() {
         const { event } = this.props;
         const { id, description, start, end } = event
+        const times = this.props.formatTime(start, end);
+
         return (
             <div className="description" key={id}>
                 <h4>{description}</h4>
-                <p>
-                    <Moment format="HH:mm A">{start}</Moment>
-                    -
-                    <Moment format="HH:mm A">{end}</Moment>
-                </p>
+                <p>{times.start}-{times.end}</p>
                 <div className="change-buttons">
                     <button className="edit-button btn" onClick={this.handleEditClick}>edit</button>
                     <button className="delete-button btn" onClick={this.handleDelete}>delete</button>
@@ -43,11 +35,11 @@ class Event extends Component {
 }
 
 Event.propTypes = {
-    events: PropTypes.array,
-    id: PropTypes.number,
-    description: PropTypes.string ,
-    start: PropTypes.string,
-    end: PropTypes.string
+    events: PropTypes.array.isRequired,
+    event: PropTypes.object.isRequired,
+    showEditForm: PropTypes.func.isRequired,
+    hideForm: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 }
 
 export default Event;

@@ -9,7 +9,7 @@ class Calendar extends Component {
         super(props);
         this.state = {
             events: []
-        }
+        };
     }
 
     componentDidMount() {
@@ -19,14 +19,9 @@ class Calendar extends Component {
         })
         .catch(error => console.log(error))
     }
-
-    onSubmit = (description, start, end, day, editForm, id) => {
-        if (editForm) {
-            this.onEditsubmit(description, start, end, id);
-            return;
-        }
-        axios.post(
-            'http://localhost:3001/api/v1/events',
+    
+    onSubmit = (description, start, end, day) => {
+        axios.post('http://localhost:3001/api/v1/events',
             { event:
                 {
                     description: description,
@@ -38,18 +33,16 @@ class Calendar extends Component {
         )
         .then(response => {
             const events = update(this.state.events,
-            {
-                $splice: [[0, 0, response.data]]
-            });
-            this.setState({events: events});
-            window.location.reload();
-        })
-        .catch(error => console.error(error))
-    }
+                {
+                    $splice: [[0, 0, response.data]]
+                });
+                this.setState({events: events});
+            })
+            .catch(error => console.error(error))
+        }
 
-    onEditsubmit(description, start, end, id) {
-        axios.put(
-            `http://localhost:3001/api/v1/events/${id}`,
+    onUpdate = (description, start, end, id) => {
+        axios.put(`http://localhost:3001/api/v1/events/${id}`,
             {
                 description: description,
                 start: start,
@@ -61,33 +54,46 @@ class Calendar extends Component {
                     [eventIndex]: {$set: response.data}
                 });
                 this.setState({events: events});
-                window.location.reload();
             })
             .catch(error => console.log(error))
     }
-    
+
+    onDelete = (id) => {
+        axios.delete(`http://localhost:3001/api/v1/events/${id}`)
+        .then(response => {
+            const eventIndex = this.props.events.findIndex(i => i.id === id);
+            const events = update(this.props.events, { $splice: [[eventIndex, 1]] });
+            this.setState({ events: events });
+        })
+        .catch(error => console.log(error))
+    }
+        
     render() { 
         let days = [];
         let dayEvents = [];
-            for(let i = 1; i < this.props.days; i++) {
-                if(this.state.events) {
-                    dayEvents = this.state.events.filter((event) => event.day_id === i)
-                }
-                days.push(<Day 
-                    day={i} 
-                    key={i} 
-                    events={dayEvents} 
-                    onSubmit={this.onSubmit}
-                />)
+        
+        for(let i = 1; i <= this.props.days; i++) {
+            if(this.state.events.length > 0) {
+                dayEvents = this.state.events.filter((event) => event.day_id === i).sort(event => event.start);
             }
+            days.push(<Day 
+                day={i} 
+                key={`day-${i}`} 
+                events={dayEvents} 
+                onSubmit={this.onSubmit}
+                onUpdate={this.onUpdate}
+                onDelete={this.onDelete}
+            />)
+        }
+            
         return (
             <div className="calendar">{days}</div>
-        )
+        );
     }
 }
 
 Calendar.propTypes = {
-    days: PropTypes.number
-}
+    days: PropTypes.number.isRequired
+};
 
 export default Calendar;

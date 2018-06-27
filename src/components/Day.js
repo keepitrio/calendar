@@ -2,57 +2,73 @@ import React, { Component } from 'react';
 import EventsContainer from './EventsContainer';
 import EventForm from './EventForm';
 import PropTypes from 'prop-types';
+import moment from "moment";
 
 class Day extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            day: null,
-            showForm: false,
-            showEvents: true,
-            showButton: true,
-            events: null,
-            editForm: false,
-            eventId: null,
-            event: null
+            currentView: "Events",
+            eventToEdit: null
         };
     }
     
     showForm = () => {
-        this.setState({showForm: true, showEvents: false, showButton: false});
+        this.setState({currentView: "Form"});
+    }
+
+    showEditForm = (event) => {
+        this.setState({eventToEdit: event, currentView: "Form"})
     }
 
     hideForm = () => {
-        this.setState({showForm: false, showEvents: true, showButton: true});
+        this.setState({currentView: "Events"});
     }
 
-    editEvent = (event) => {
-        this.setState({showEvents: false, showForm: true, editForm: true, event: event});
+    onSubmit = (description, start, end, day, id) => {
+        if(id) {
+            this.props.onUpdate(description, start, end, id)
+        } else {
+            this.props.onSubmit(description, start, end, day);
+        }
+        this.hideForm();
+    }
+
+    formatTime = (start, end) => {
+        const startTimeToParse = moment(start);
+        const startTimeToDisplay = startTimeToParse.utc().format('HH:mm');
+        const endTimeToParse = moment(end);
+        const endTimeToDisplay = endTimeToParse.utc().format('HH:mm');
+
+        return {start: startTimeToDisplay, end: endTimeToDisplay};
     }
 
     render() {
-        const { day, events, onSubmit } = this.props;
+        const { day, events, onSubmit, onDelete } = this.props;
+        const { currentView, eventToEdit } = this.state;
         return (
             <div className="day-box">
                 <p className="day-number">{day}</p>
-                {this.state.showButton && 
-                    <button className="new-event-button btn" onClick={this.showForm}> Create </button>
+                {currentView === "Events" && 
+                    <button className="new-event-button btn" onClick={this.showForm}>Create</button>
                 }
-                {this.state.showForm && 
-                    <EventForm onSubmit={onSubmit} hideForm={this.hideForm} day={day} editForm={this.state.editForm} event={this.state.event} />
+                {currentView === "Form" && 
+                    <EventForm onSubmit={this.onSubmit} eventToEdit={eventToEdit} hideForm={this.hideForm} day={day} formatTime={this.formatTime} />
                 }
-                {this.state.showEvents && 
-                    <EventsContainer events={events} day={day} onSubmit={onSubmit} editEvent={this.editEvent} />
+                {currentView === "Events" && 
+                    <EventsContainer events={events} day={day} onSubmit={onSubmit} showEditForm={this.showEditForm} hideForm={this.hideForm} onDelete={onDelete} formatTime={this.formatTime} />
                 }
             </div>
-        )
+        );
     }
 }
 
 Day.propTypes = {
-    day: PropTypes.number,
-    events: PropTypes.array,
-    onSubmit: PropTypes.func
+    day: PropTypes.number.isRequired,
+    events: PropTypes.array.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    onUpdate: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 }
 
 export default Day;
