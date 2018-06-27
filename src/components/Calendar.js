@@ -61,8 +61,8 @@ class Calendar extends Component {
     onDelete = (id) => {
         axios.delete(`http://localhost:3001/api/v1/events/${id}`)
         .then(response => {
-            const eventIndex = this.props.events.findIndex(i => i.id === id);
-            const events = update(this.props.events, { $splice: [[eventIndex, 1]] });
+            const eventIndex = this.state.events.findIndex(i => i.id === id);
+            const events = update(this.state.events, { $splice: [[eventIndex, 1]] });
             this.setState({ events: events });
         })
         .catch(error => console.log(error))

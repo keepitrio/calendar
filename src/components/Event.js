@@ -5,7 +5,6 @@ class Event extends Component {
     handleDelete = (e) => {
         const { id } = this.props.event;
         this.props.onDelete(id);
-        window.location.reload();
     }
 
     handleEditClick = () => {
