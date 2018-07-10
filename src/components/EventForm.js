@@ -21,7 +21,7 @@ class EventForm extends Component {
         const { description, start, end } = this.state;
         const { day, eventToEdit, onSubmit } = this.props;
         const errors = validate(description, start, end);
-        if (errors.length > 0) {
+        if(errors.length > 0) {
             this.setState({ errors });
             return;
         }
@@ -37,7 +37,7 @@ class EventForm extends Component {
     }
 
     componentWillMount = () => {
-        if (this.props.eventToEdit){
+        if(this.props.eventToEdit){
             const { description, start, end } = this.props.eventToEdit;
             const times = this.props.formatTime(start, end);
             this.setState({description: description, start: times.start, end: times.end});
