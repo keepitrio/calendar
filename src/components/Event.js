@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 class Event extends Component {
-    handleDelete = (e) => {
+    handleDelete = () => {
         const { id } = this.props.event;
         this.props.onDelete(id);
     }
@@ -30,10 +30,8 @@ class Event extends Component {
 }
 
 Event.propTypes = {
-    events: PropTypes.array.isRequired,
     event: PropTypes.object.isRequired,
     showEditForm: PropTypes.func.isRequired,
-    hideForm: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired
 }
 
