@@ -11,10 +11,6 @@ class Event extends Component {
         this.props.showEditForm(this.props.event);
     }
 
-    formatTimes = (start, end) => {
-        
-    }
-
     render() {
         const { event } = this.props;
         const { id, description, start, end } = event
